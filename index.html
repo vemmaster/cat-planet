@@ -143,6 +143,50 @@
     background: var(--cream); text-align: center; line-height: 1.6;
   }
 
+  /* ---------- dev console (prototype only) ---------- */
+  #devBtn {
+    position: fixed; right: 12px; bottom: 64px; z-index: 15;
+    width: 46px; height: 46px; padding: 0; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #devPanel {
+    position: fixed; top: 64px; right: 12px; z-index: 15;
+    width: 302px; max-width: calc(100vw - 24px); max-height: calc(100vh - 84px);
+    overflow-y: auto; background: var(--card); border-radius: 20px;
+    box-shadow: var(--shadow); padding: 14px 14px 12px; font-size: 13px;
+  }
+  #devPanel.hidden { display: none; }
+  .dev-head { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .dev-head b { font-size: 15px; }
+  .dev-head .tag { font-size: 11px; color: #c2275a; background: #ffe3ee; padding: 2px 8px; border-radius: 999px; font-weight: 700; }
+  .dev-head .x { margin-left: auto; }
+  .dev-sec { border-top: 1px dashed #ecdcc8; padding: 10px 0 4px; }
+  .dev-sec h4 { font-size: 13px; margin-bottom: 8px; }
+  .dev-sec h4 small { color: var(--ink-soft); font-weight: 600; }
+  .dev-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .seg {
+    cursor: pointer; border: 1.5px solid #eee0cf; background: #fff; color: var(--ink);
+    font-size: 12.5px; font-weight: 700; padding: 6px 10px; border-radius: 999px;
+    font-family: inherit; transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+  }
+  .seg:hover { transform: translateY(-1px); }
+  .seg:active { transform: scale(0.96); }
+  .seg.active { background: #ffe3ee; color: #c2275a; border-color: #ffb3c7; }
+  .seg.x { padding: 4px 9px; }
+  .dev-slider-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 700; }
+  .dev-slider-row input[type=range] { flex: 1; accent-color: #ff9ebb; }
+  .dev-toggle { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-weight: 600; cursor: pointer; }
+  .dev-toggle input { accent-color: #ff9ebb; width: 16px; height: 16px; }
+  .dev-read { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; font-size: 12.5px; }
+  .dev-read b { color: var(--ink-soft); font-weight: 600; }
+  #devReset { width: 100%; margin-top: 8px; }
+  .dev-note { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; margin-top: 10px; }
+
+  @media (max-width: 640px) {
+    #devPanel { top: auto; bottom: 12px; right: 12px; left: 12px; width: auto; max-height: 52vh; }
+    #devBtn { bottom: auto; top: 60px; }
+  }
+
   @media (max-width: 640px) {
     #topbar h1 { font-size: 16px; }
     #topbar h1 span { font-size: 11px; }
@@ -191,6 +235,92 @@
 </div>
 
 <div id="err"><div><b>Không mở được khung cảnh 3D 😿</b><br><br>Trình duyệt này chưa bật WebGL, hoặc chưa tải được thư viện Three.js.<br>Thử mở lại bằng Chrome / Safari mới nhất và kiểm tra mạng.</div></div>
+
+<button class="btn" id="devBtn" title="Dev console — phím `">🛠️</button>
+<div id="devPanel" class="hidden">
+  <div class="dev-head"><b>🔧 Dev Console</b><span class="tag">prototype only</span><button class="seg x" id="devClose" type="button">✕</button></div>
+
+  <div class="dev-sec">
+    <h4>🕐 Thời gian &amp; mùa <small>— chỉ xem trước art</small></h4>
+    <div class="dev-row">
+      <button class="seg active" data-time="morning" type="button">🌅 Sáng</button>
+      <button class="seg" data-time="noon" type="button">☀️ Trưa</button>
+      <button class="seg" data-time="golden" type="button">🌇 Hoàng hôn</button>
+      <button class="seg" data-time="night" type="button">🌙 Đêm</button>
+    </div>
+    <div class="dev-row">
+      <button class="seg active" data-season="spring" type="button">🌸 Xuân</button>
+      <button class="seg" data-season="summer" type="button">☀️ Hạ</button>
+      <button class="seg" data-season="autumn" type="button">🍂 Thu</button>
+      <button class="seg" data-season="winter" type="button">❄️ Đông</button>
+    </div>
+  </div>
+
+  <div class="dev-sec">
+    <h4>📷 Camera</h4>
+    <div class="dev-row">
+      <button class="seg active" data-cam="wide" type="button">🏝️ Toàn cảnh</button>
+      <button class="seg" data-cam="cat" type="button">🐱 Gần mèo</button>
+      <button class="seg" data-cam="top" type="button">⬇️ Từ trên cao</button>
+      <button class="seg" data-cam="pond" type="button">💧 Bên hồ</button>
+    </div>
+    <label class="dev-toggle"><input type="checkbox" id="freeFlyToggle"> Bay tự do (mở hết giới hạn camera)</label>
+  </div>
+
+  <div class="dev-sec">
+    <h4>🐱 Mèo</h4>
+    <div class="dev-row">
+      <button class="seg" data-catstate="sit" type="button">Ngồi</button>
+      <button class="seg" data-catstate="walk" type="button">Đi dạo</button>
+      <button class="seg" data-catstate="sleep" type="button">Ngủ</button>
+      <button class="seg" data-catstate="groom" type="button">Liếm lông</button>
+      <button class="seg" data-catstate="snuggle" type="button">Quấn chủ</button>
+      <button class="seg" id="petBtn" type="button">❤️ Vuốt ve</button>
+    </div>
+    <div class="dev-row">
+      <button class="seg" data-teleport="owner" type="button">→ Chỗ chủ</button>
+      <button class="seg" data-teleport="center" type="button">→ Giữa vườn</button>
+      <button class="seg" data-teleport="pond" type="button">→ Bên hồ</button>
+      <button class="seg" data-teleport="tree" type="button">→ Gốc cây</button>
+      <button class="seg" data-teleport="random" type="button">→ Ngẫu nhiên</button>
+    </div>
+    <div class="dev-row">
+      <button class="seg active" data-fur-dev="tabby" type="button">Cam vằn</button>
+      <button class="seg" data-fur-dev="bicolor" type="button">Xám – trắng</button>
+      <button class="seg" data-fur-dev="black" type="button">Đen</button>
+    </div>
+    <div class="dev-slider-row"><span>Phai</span><input type="range" id="fadeSlider" min="0" max="100" value="0" step="5"><b id="fadeVal">0%</b></div>
+    <div class="dev-row"><button class="seg" id="careBtn" type="button">💗 Chăm (+25% hồi màu)</button></div>
+    <label class="dev-toggle"><input type="checkbox" id="haloToggle"> Halo mèo kỷ niệm (mờ, không bóng, hơi sáng)</label>
+  </div>
+
+  <div class="dev-sec">
+    <h4>🌼 Vườn</h4>
+    <div class="dev-row">
+      <button class="seg" id="wobbleBtn" type="button">🌸 Rung tất cả hoa</button>
+      <button class="seg" id="burstBtn" type="button">✨ Hạt sáng ở mèo</button>
+    </div>
+    <label class="dev-toggle"><input type="checkbox" id="cloudsToggle" checked> ☁️ Mây</label>
+    <label class="dev-toggle"><input type="checkbox" id="sparkToggle" checked> ✨ Hạt sáng lơ lửng</label>
+    <label class="dev-toggle"><input type="checkbox" id="flyToggle" checked> 🦋 Bướm</label>
+  </div>
+
+  <div class="dev-sec">
+    <h4>📊 Thông tin</h4>
+    <div class="dev-read">
+      <span><b>Trạng thái:</b> <span id="roState">—</span></span>
+      <span><b>Đổi sau:</b> <span id="roTimer">—</span></span>
+      <span><b>Vị trí mèo:</b> <span id="roPos">—</span></span>
+      <span><b>Phai:</b> <span id="roFade">0%</span></span>
+      <span><b>FPS:</b> <span id="roFps">—</span></span>
+      <span><b>Draw calls:</b> <span id="roCalls">—</span></span>
+      <span><b>Tam giác:</b> <span id="roTris">—</span></span>
+    </div>
+  </div>
+
+  <button class="btn" id="devReset" type="button">↺ Reset tất cả về mặc định</button>
+  <p class="dev-note">Panel dev-only, mặc định ẩn — bản chơi thật sẽ không có. Không có combat nên không có sát thương / máu / giáp / quái / boss. Bản chính vẫn là nắng ấm ban ngày; giờ &amp; mùa ở đây chỉ để xem trước art.</p>
+</div>
 
 <script type="importmap">
 {
@@ -1024,6 +1154,229 @@ function animate() {
   controls.update();
   renderer.render(scene, camera);
 }
+
+/* ---------------- dev console (prototype only — kurorosage method, sim-only) ----------------
+   Mở: nút 🛠️ góc phải, phím `, hoặc link #dev. Mặc định ẩn — bản chơi thật không có panel này.
+   Chỉ có tính năng hợp với sim (thời gian/mùa/camera/trạng thái mèo/phai/vườn).
+   KHÔNG có combat nên KHÔNG có: sát thương, máu, giáp, quái, boss, god mode.
+   Giờ & mùa chỉ xem trước art — bản chính vẫn là nắng ấm ban ngày (DAY). */
+const dev = { time: 'morning', season: 'spring', cam: 'wide', freeFly: false };
+const treePuffs = tree.children.filter((o) => o.geometry && o.geometry.type === 'SphereGeometry');
+
+/* --- thời gian: đổi ánh sáng live để xem art trong mọi điều kiện --- */
+const TIME_PRESETS = {
+  morning: { sky: 0xbfe9f2, fog: 0xcfeef5, hemiSky: 0xfff6e0, hemiGround: 0xb5de9c, hemiInt: 1.0, sun: 0xffe9b8, sunInt: 1.25, sunPos: [6, 10, 4], fillInt: 0.25 },
+  noon:    { sky: 0x9fd8ef, fog: 0xbfe6f5, hemiSky: 0xffffff, hemiGround: 0x9ed08a, hemiInt: 1.15, sun: 0xfff3d6, sunInt: 1.5, sunPos: [2, 14, 2], fillInt: 0.3 },
+  golden:  { sky: 0xffc98a, fog: 0xffd9a8, hemiSky: 0xffd9a0, hemiGround: 0x8a9a6a, hemiInt: 0.85, sun: 0xff9e57, sunInt: 1.4, sunPos: [-8, 4, 6], fillInt: 0.18 },
+  night:   { sky: 0x1e2a4a, fog: 0x27365c, hemiSky: 0x8aa8e8, hemiGround: 0x2a3a2a, hemiInt: 0.35, sun: 0xbfd0ff, sunInt: 0.5, sunPos: [-4, 10, -6], fillInt: 0.08 },
+};
+function applyTime(key) {
+  const p = TIME_PRESETS[key]; if (!p) return;
+  scene.background.setHex(p.sky);
+  scene.fog.color.setHex(p.fog);
+  hemi.color.setHex(p.hemiSky); hemi.groundColor.setHex(p.hemiGround); hemi.intensity = p.hemiInt;
+  sun.color.setHex(p.sun); sun.intensity = p.sunInt; sun.position.set(...p.sunPos);
+  fill.intensity = p.fillInt;
+  document.body.style.background = '#' + p.sky.toString(16).padStart(6, '0');
+  dev.time = key;
+  document.querySelectorAll('[data-time]').forEach((b) => b.classList.toggle('active', b.dataset.time === key));
+}
+
+/* --- mùa: vườn đổi màu theo mùa (tính năng thật của game, xem trước ở đây) --- */
+const SEASON_PRESETS = {
+  spring: { grass: 0xaedd94, rim: 0xc2e8a4, puffs: [0x8ccb7a, 0xa5d98a, 0x7fbf6a, 0xa5d98a], flowers: [0xffb3c7, 0xffd6a5, 0xc3b2f5, 0xfff3b0, 0xffffff, 0xff9ebb] },
+  summer: { grass: 0x8fd17a, rim: 0xa8d98a, puffs: [0x6faf5e, 0x8ccb7a, 0x5da24e, 0x8ccb7a], flowers: [0xff8fb3, 0xffc46b, 0xfff3b0, 0xffffff, 0xff6b9d, 0xffd6a5] },
+  autumn: { grass: 0xd9c27a, rim: 0xcbb27a, puffs: [0xe8a34c, 0xd97b4f, 0xc96f4a, 0xe8a34c], flowers: [0xff9e57, 0xffc46b, 0xe8a34c, 0xfff3b0, 0xd97b4f, 0xffffff] },
+  winter: { grass: 0xdfe9e4, rim: 0xcfe0d8, puffs: [0xb9d3c5, 0xc8ddd2, 0xa8c8b8, 0xc8ddd2], flowers: [0xffffff, 0xdfe9f5, 0xc3d9f5, 0xffffff, 0xeef4ff, 0xdfe9f5] },
+};
+function applySeason(key) {
+  const p = SEASON_PRESETS[key]; if (!p) return;
+  grassTop.material.color.setHex(p.grass);
+  rim.material.color.setHex(p.rim);
+  treePuffs.forEach((m, i) => m.material.color.setHex(p.puffs[i % p.puffs.length]));
+  const col = new THREE.Color();
+  for (let i = 0; i < flowerData.length; i++) {
+    bloomMesh.setColorAt(i, col.setHex(p.flowers[i % p.flowers.length]));
+  }
+  bloomMesh.instanceColor.needsUpdate = true;
+  dev.season = key;
+  document.querySelectorAll('[data-season]').forEach((b) => b.classList.toggle('active', b.dataset.season === key));
+}
+
+/* --- camera: preset + bay tự do --- */
+const CAM_DEFAULT = { min: 7, max: 15, minPol: 0.9, maxPol: 1.25, minAz: -0.9, maxAz: 0.9 };
+function applyCam(key) {
+  if (!cat) return;
+  let pos, tgt;
+  if (key === 'cat') {
+    pos = [cat.position.x + 2.2, 1.6, cat.position.z + 3.2];
+    tgt = [cat.position.x, 0.7, cat.position.z];
+  } else {
+    const p = { wide: { pos: [0, 8.2, 12.5], tgt: [0, 0.6, 0] }, top: { pos: [0, 14, 4], tgt: [0, 0, 0] }, pond: { pos: [6.5, 3.2, 6.5], tgt: [3.2, 0.3, 2.2] } }[key];
+    if (!p) return;
+    pos = p.pos; tgt = p.tgt;
+  }
+  camera.position.set(...pos);
+  controls.target.set(...tgt);
+  controls.update();
+  dev.cam = key;
+  document.querySelectorAll('[data-cam]').forEach((b) => b.classList.toggle('active', b.dataset.cam === key));
+}
+function setFreeFly(on) {
+  dev.freeFly = on;
+  if (on) {
+    controls.minDistance = 2; controls.maxDistance = 40;
+    controls.minPolarAngle = 0.05; controls.maxPolarAngle = Math.PI - 0.05;
+    controls.minAzimuthAngle = -Infinity; controls.maxAzimuthAngle = Infinity;
+    controls.enablePan = true;
+  } else {
+    controls.minDistance = CAM_DEFAULT.min; controls.maxDistance = CAM_DEFAULT.max;
+    controls.minPolarAngle = CAM_DEFAULT.minPol; controls.maxPolarAngle = CAM_DEFAULT.maxPol;
+    controls.minAzimuthAngle = CAM_DEFAULT.minAz; controls.maxAzimuthAngle = CAM_DEFAULT.maxAz;
+    controls.enablePan = false;
+    applyCam('wide');
+  }
+  controls.update();
+}
+
+/* --- mèo: ép trạng thái, teleport, phai, halo kỷ niệm --- */
+let fadeVal = 0;
+function applyFade(v) {
+  fadeVal = Math.max(0, Math.min(100, v));
+  if (cat) {
+    const op = 1 - (fadeVal / 100) * 0.88; // 100% -> còn 0.12: chỉ còn outline, mèo không biến mất hẳn
+    cat.traverse((o) => {
+      if (o.isMesh && o.material) {
+        const mats = Array.isArray(o.material) ? o.material : [o.material];
+        mats.forEach((m) => { m.transparent = true; m.opacity = op; });
+      }
+    });
+  }
+  const fv = document.querySelector('#fadeVal'); if (fv) fv.textContent = fadeVal + '%';
+  const fs = document.querySelector('#fadeSlider'); if (fs && +fs.value !== fadeVal) fs.value = fadeVal;
+}
+function teleportCat(x, z) {
+  if (!cat) return;
+  cat.position.set(x, 0, z);
+  walkTarget.set(x, 0, z);
+  if (catState === 'walk' || catState === 'walkToShadow' || catState === 'sleep') setState('sit', 6);
+}
+const TELEPORTS = {
+  owner: () => [shadowTarget.x, shadowTarget.z],
+  center: () => [0, 0],
+  pond: () => [1.4, 2.6],
+  tree: () => [-2.2, -1.4],
+  random: () => { const a = Math.random() * Math.PI * 2, r = rand(0.8, 6.4); return [Math.cos(a) * r, Math.sin(a) * r]; },
+};
+let haloOn = false;
+const haloTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(64, 64, 8, 64, 64, 62);
+  grad.addColorStop(0, 'rgba(255, 236, 170, 0.95)');
+  grad.addColorStop(0.45, 'rgba(255, 214, 120, 0.45)');
+  grad.addColorStop(1, 'rgba(255, 214, 120, 0)');
+  g.fillStyle = grad; g.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+})();
+const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: haloTex, transparent: true, opacity: 0.9, depthWrite: false }));
+halo.scale.setScalar(2.2);
+halo.visible = false;
+scene.add(halo);
+function setCatShadow(on) {
+  if (!catParts) return;
+  const parts = [catParts.body, catParts.head, ...catParts.paws, ...(catParts.tailG ? catParts.tailG.children : [])];
+  parts.forEach((m) => { if (m && m.isMesh) m.castShadow = on; });
+}
+function setHalo(on) {
+  haloOn = on;
+  halo.visible = on;
+  setCatShadow(!on); // mèo đã mất: không bóng
+  const t = document.querySelector('#haloToggle'); if (t) t.checked = on;
+}
+
+/* --- reset tất cả về mặc định --- */
+function resetDev() {
+  applyTime('morning');
+  applySeason('spring');
+  setFreeFly(false);
+  const fft = document.querySelector('#freeFlyToggle'); if (fft) fft.checked = false;
+  buildCat('tabby'); furPattern = 'tabby';
+  document.querySelectorAll('.fur').forEach((b) => b.classList.toggle('selected', b.dataset.fur === 'tabby'));
+  document.querySelectorAll('[data-fur-dev]').forEach((b) => b.classList.toggle('active', b.dataset.furDev === 'tabby'));
+  applyFade(0);
+  setHalo(false);
+  clouds.forEach((c) => { c.visible = true; });
+  sparkles.visible = true;
+  butterflies.forEach((b) => { b.visible = true; });
+  ['#cloudsToggle', '#sparkToggle', '#flyToggle'].forEach((s) => { const el = document.querySelector(s); if (el) el.checked = true; });
+  if (started) setState('sit', 5);
+}
+
+/* --- mở/đóng panel --- */
+const devPanel = document.querySelector('#devPanel');
+const devBtn = document.querySelector('#devBtn');
+function setPanel(open) {
+  devPanel.classList.toggle('hidden', !open);
+  devBtn.classList.toggle('active', open);
+}
+devBtn.addEventListener('click', () => setPanel(devPanel.classList.contains('hidden')));
+document.querySelector('#devClose').addEventListener('click', () => setPanel(false));
+window.addEventListener('keydown', (e) => {
+  if (e.key === '`' || e.key === '~') setPanel(devPanel.classList.contains('hidden'));
+});
+if (location.hash === '#dev') setPanel(true);
+
+/* --- wiring --- */
+document.querySelectorAll('[data-time]').forEach((b) => b.addEventListener('click', () => applyTime(b.dataset.time)));
+document.querySelectorAll('[data-season]').forEach((b) => b.addEventListener('click', () => applySeason(b.dataset.season)));
+document.querySelectorAll('[data-cam]').forEach((b) => b.addEventListener('click', () => applyCam(b.dataset.cam)));
+document.querySelector('#freeFlyToggle').addEventListener('change', (e) => setFreeFly(e.target.checked));
+const CAT_DUR = { sit: 8, walk: 10, sleep: 25, groom: 8, snuggle: 0 };
+document.querySelectorAll('[data-catstate]').forEach((b) => b.addEventListener('click', () => {
+  if (cat) setState(b.dataset.catstate, CAT_DUR[b.dataset.catstate] || 8);
+}));
+document.querySelector('#petBtn').addEventListener('click', () => petCat());
+document.querySelectorAll('[data-teleport]').forEach((b) => b.addEventListener('click', () => {
+  const [x, z] = TELEPORTS[b.dataset.teleport]();
+  teleportCat(x, z);
+}));
+document.querySelectorAll('[data-fur-dev]').forEach((b) => b.addEventListener('click', () => {
+  buildCat(b.dataset.furDev); furPattern = b.dataset.furDev;
+  applyFade(fadeVal);
+  if (haloOn) setCatShadow(false);
+  document.querySelectorAll('.fur').forEach((f) => f.classList.toggle('selected', f.dataset.fur === b.dataset.furDev));
+  document.querySelectorAll('[data-fur-dev]').forEach((f) => f.classList.toggle('active', f === b));
+}));
+document.querySelector('#fadeSlider').addEventListener('input', (e) => applyFade(+e.target.value));
+document.querySelector('#careBtn').addEventListener('click', () => applyFade(fadeVal - 25));
+document.querySelector('#haloToggle').addEventListener('change', (e) => setHalo(e.target.checked));
+document.querySelector('#wobbleBtn').addEventListener('click', () => flowerData.forEach((f) => { f.wobble = 1; }));
+document.querySelector('#burstBtn').addEventListener('click', () => {
+  if (cat) spawnBurst(cat.position.clone().add(new THREE.Vector3(0, 0.8, 0)));
+});
+document.querySelector('#cloudsToggle').addEventListener('change', (e) => clouds.forEach((c) => { c.visible = e.target.checked; }));
+document.querySelector('#sparkToggle').addEventListener('change', (e) => { sparkles.visible = e.target.checked; });
+document.querySelector('#flyToggle').addEventListener('change', (e) => butterflies.forEach((b) => { b.visible = e.target.checked; }));
+document.querySelector('#devReset').addEventListener('click', resetDev);
+
+/* --- readout: trạng thái mèo + hiệu năng, cập nhật 3 lần/giây --- */
+let _lastTick = performance.now(), _fps = 60;
+function tickReadout() {
+  const now = performance.now();
+  const dt = Math.max((now - _lastTick) / 1000, 0.001); _lastTick = now;
+  _fps = _fps * 0.9 + (1 / dt) * 0.1;
+  const el = (id) => document.querySelector('#' + id);
+  if (el('roState')) el('roState').textContent = catState + (catState === 'sleep' ? ' (' + sleepPose + ')' : '');
+  if (el('roTimer')) el('roTimer').textContent = Math.max(0, stateTimer).toFixed(0) + 's';
+  if (el('roPos') && cat) el('roPos').textContent = cat.position.x.toFixed(1) + ', ' + cat.position.z.toFixed(1);
+  if (el('roFade')) el('roFade').textContent = fadeVal + '%';
+  if (el('roFps')) el('roFps').textContent = _fps.toFixed(0);
+  if (el('roCalls')) el('roCalls').textContent = renderer.info.render.calls;
+  if (el('roTris')) el('roTris').textContent = renderer.info.render.triangles.toLocaleString('vi-VN');
+  if (haloOn && cat) halo.position.set(cat.position.x, 1.7, cat.position.z);
+}
+setInterval(tickReadout, 300);
 
 /* ---------------- init ---------------- */
 buildCat('tabby');

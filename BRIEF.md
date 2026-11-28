@@ -81,4 +81,4 @@ mặc định.
 - Repo: https://github.com/vemmaster/cat-planet
 - Obsidian: vault VemOS → thư mục `Hành Tinh Mèo` (note `Tổng quan.md`
   dẫn tới đây, Pinterest board và quyết định mới nhất).
-- Pinterest board: (chưa có link — bổ sung sau).
+- Pinterest board: https://jp.pinterest.com/huuthienvt/cat-planet/
